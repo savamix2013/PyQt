@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QGraphicsRectItem
 from PyQt6.QtCore import QTimer
+from Enemy import Enemy
 
 
 class Bullet(QGraphicsRectItem):
@@ -17,4 +18,20 @@ class Bullet(QGraphicsRectItem):
     def move(self):
         self.setPos(self.x(), self.y() - 10)
         
-        
+        colliding_items = self.collidingItems()
+
+        for item in colliding_items:
+            if isinstance(item, Enemy):
+                self.scene().removeItem(item)
+                self.scene().removeItem(self)
+
+
+                print("Bullet hit an enemy")
+
+                self.timer.stop()
+
+                del item
+                del self
+
+                return
+
