@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QGraphi
 from Player import Player
 from PyQt6.QtCore import QTimer
 from Enemy import Enemy
+from Score import Score
 
 
 class Window(QGraphicsView):
@@ -30,6 +31,10 @@ class Window(QGraphicsView):
         #self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         self.setWindowTitle("Bayraktar")
+
+        # adding score
+        self.score = Score()
+        self.scene.addItem(self.score)
 
         self.player.setPos(self.scene.width() / 2 - self.player.rect().width() / 2,
                            self.scene.height() - self.player.rect().height())

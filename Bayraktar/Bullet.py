@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QGraphicsRectItem
 from PyQt6.QtCore import QTimer
 from Enemy import Enemy
+from Score import Score
 
 
 class Bullet(QGraphicsRectItem):
@@ -22,6 +23,12 @@ class Bullet(QGraphicsRectItem):
 
         for item in colliding_items:
             if isinstance(item, Enemy):
+
+
+                for scene_items in self.scene().items():
+                    if isinstance(scene_items, Score):
+                        scene_items.increase()
+                        print("Score increased")
                 self.scene().removeItem(item)
                 self.scene().removeItem(self)
 
