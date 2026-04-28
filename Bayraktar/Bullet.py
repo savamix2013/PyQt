@@ -1,14 +1,15 @@
-from PyQt6.QtWidgets import QGraphicsRectItem
+from PyQt6.QtWidgets import QGraphicsPixmapItem
 from PyQt6.QtCore import QTimer
 from Enemy import Enemy
 from Score import Score
+from PyQt6.QtGui import QPixmap
 
 
-class Bullet(QGraphicsRectItem):
+class Bullet(QGraphicsPixmapItem):
     def __init__(self):
         super().__init__()
 
-        self.setRect(0,0,10,50)
+        self.setPixmap(QPixmap("bullet.png"))
 
         self.timer = QTimer()
 

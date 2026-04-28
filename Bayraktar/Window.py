@@ -1,11 +1,12 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QGraphicsItem
+from PyQt6.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QGraphicsItem, QGraphicsTextItem
 from Player import Player
-from PyQt6.QtCore import QTimer, QUrl
+from PyQt6.QtCore import QTimer, QUrl, Qt
 from Enemy import Enemy
 from Score import Score
 from Health import Health
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtGui import QPixmap, QFont
 
 
 class Window(QGraphicsView):
@@ -16,9 +17,10 @@ class Window(QGraphicsView):
 
         self.scene = QGraphicsScene()
 
-        #rect = QGraphicsRectItem()
+        self.setStyleSheet('background-color:#8b624c')
+
         self.player = Player()
-        self.player.setRect(0, 0, 100, 100)
+        self.player.setPixmap(QPixmap("player.png"))
 
         self.scene.addItem(self.player)
 
@@ -45,8 +47,8 @@ class Window(QGraphicsView):
         self.scene.addItem(self.health)
         self.health.setPos(self.health.x(), self.health.y() + 28)
 
-        self.player.setPos(self.scene.width() / 2 - self.player.rect().width() / 2,
-                           self.scene.height() - self.player.rect().height())
+        self.player.setPos(self.scene.width() / 2 - self.player.pixmap().width() / 2,
+                           self.scene.height() - self.player.pixmap().height())
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.spawn)
@@ -58,6 +60,25 @@ class Window(QGraphicsView):
     def spawn(self):
         enemy = Enemy()
         self.scene.addItem(enemy)
+
+    def game_over(self):
+        self.timer.stop()
+
+        for item in self.scene.items():
+            if isinstance(item, Enemy):
+                item.timer.stop()
+
+        self.player.setEnabled(False)
+        self.player.clearFocus()
+
+        game_over_text = QGraphicsTextItem("Гра закінчена")
+        game_over_text.setDefaultTextColor(Qt.GlobalColor.white)
+        game_over_text.setFont(QFont("Sanserif", 32))
+        game_over_text.setPos(
+            self.scene.width() / 2 - game_over_text.boundingRect().width() / 2,
+            self.scene.height() / 2 - game_over_text.boundingRect().height() / 2
+        )
+        self.scene.addItem(game_over_text)
 
     def setup_music(self):
         self.media_player = QMediaPlayer()
