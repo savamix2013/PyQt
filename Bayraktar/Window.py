@@ -4,6 +4,7 @@ from Player import Player
 from PyQt6.QtCore import QTimer
 from Enemy import Enemy
 from Score import Score
+from Health import Health
 
 
 class Window(QGraphicsView):
@@ -35,6 +36,11 @@ class Window(QGraphicsView):
         # adding score
         self.score = Score()
         self.scene.addItem(self.score)
+
+        # adding health
+        self.health = Health()
+        self.scene.addItem(self.health)
+        self.health.setPos(self.health.x(), self.health.y() + 28)
 
         self.player.setPos(self.scene.width() / 2 - self.player.rect().width() / 2,
                            self.scene.height() - self.player.rect().height())
