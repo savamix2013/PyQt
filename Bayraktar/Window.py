@@ -1,15 +1,18 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QGraphicsItem
 from Player import Player
-from PyQt6.QtCore import QTimer
+from PyQt6.QtCore import QTimer, QUrl
 from Enemy import Enemy
 from Score import Score
 from Health import Health
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 
 
 class Window(QGraphicsView):
     def __init__(self):
         super().__init__()
+
+        self.setup_music()
 
         self.scene = QGraphicsScene()
 
@@ -49,11 +52,24 @@ class Window(QGraphicsView):
         self.timer.timeout.connect(self.spawn)
         self.timer.start(2000)
 
+
+
+
     def spawn(self):
         enemy = Enemy()
         self.scene.addItem(enemy)
 
+    def setup_music(self):
+        self.media_player = QMediaPlayer()
 
+        self.audio = QAudioOutput()
+        self.audio.setVolume(0.5)
+        self.media_player.setAudioOutput(self.audio)
+
+        music_file = QUrl.fromLocalFile("bg3.mp3")
+        self.media_player.setSource(music_file)
+
+        self.media_player.play()
 
 
 app = QApplication(sys.argv)
